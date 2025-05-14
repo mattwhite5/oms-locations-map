@@ -4,18 +4,20 @@
   <meta charset="utf-8" />
   <title>OMS Locations Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <style>
     body { margin: 0; font-family: 'Inter', sans-serif; }
     #map { height: 100vh; width: 100%; }
-    .city-label {
-      background: none;
-      border: none;
-      box-shadow: none;
-      font-size: 18px;
-      font-weight: 600;
-      color: #000;
+    .leaflet-tooltip {
+      font-size: 16px;
+      font-weight: 500;
+      background-color: white;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 4px;
+      color: black;
     }
     .leaflet-popup-content {
       font-size: 15px;
@@ -85,21 +87,16 @@
       { name: "Reimels, Miller, Paterra Family & Cosmetics", lat: 35.4382, lng: -80.8580, address: "Huntersville, NC" },
       { name: "Oral Surgery and Wisdom Teeth of Pennsylvania", lat: 40.2732, lng: -76.8867, address: "Harrisburg, PA" },
       { name: "Kids First Dental - Lancaster", lat: 34.7298, lng: -80.7718, address: "Lancaster, SC" }
-    ];
+   ];
 
     locations.forEach(loc => {
+      const tooltipContent = `<strong>${loc.name}</strong><br>${loc.address}`;
       const popupContent = `<strong>${loc.name}</strong><br>${loc.address}`;
-      L.marker([loc.lat, loc.lng]).addTo(map)
-        .bindPopup(popupContent);
 
-      L.marker([loc.lat + 0.2, loc.lng], {
-        icon: L.divIcon({
-          className: 'city-label',
-          html: loc.address.split(',')[0],  // Show city only
-          iconSize: [100, 30],
-          iconAnchor: [0, 0]
-        })
-      }).addTo(map);
+      L.marker([loc.lat, loc.lng])
+        .addTo(map)
+        .bindPopup(popupContent)
+        .bindTooltip(tooltipContent, { direction: 'top', offset: [0, -10], permanent: false });
     });
   </script>
 </body>
